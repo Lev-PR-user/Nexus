@@ -8,7 +8,12 @@ class Corepository():
         self.db = db
 
     def get_all(self,) -> List[ОператорыM]:
-        return self.db.query(ОператорыM).all()
+        try:
+            return self.db.query(ОператорыM).all()
+        
+        except HTTPException:
+            self.db.rollback()
+            raise
     
     def create_operator(self, Odata: Dict[str, Any]) -> ОператорыM:
         try:

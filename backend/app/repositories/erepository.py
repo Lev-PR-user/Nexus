@@ -8,7 +8,12 @@ class Cerepository():
         self.db = db
 
     def get_all(self) -> List[ОборудованиеM]:
-        return self.db.query(ОборудованиеM).all()
+        try:
+            return self.db.query(ОборудованиеM).all()
+            
+        except HTTPException:
+            self.db.rollback()
+            raise
 
     def create_equipment(self, equipmentdata: Dict[str, Any]) -> ОборудованиеM:
         try:

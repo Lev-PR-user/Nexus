@@ -8,7 +8,12 @@ class Ccrepository():
         self.db = db
 
     def get_all(self) -> List[КлиентыM]:
-        return self.db.query(КлиентыM).all()
+        try:
+            return self.db.query(КлиентыM).all()
+        
+        except HTTPException:
+            self.db.rollback()
+            raise
 
     def create_client(self, clientdata: Dict[str, Any], пользователь_id: int) -> КлиентыM:
         try: 

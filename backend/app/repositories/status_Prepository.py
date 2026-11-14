@@ -14,7 +14,7 @@ class Csprepository:
             self.db.rollback()
             raise
 
-    def status_by_id(self, статусы_оплаты_id = None) -> Optional[СтатусыОплатыM]:
+    def status_by_id(self, статусы_оплаты_id: Optional[int]) -> Optional[СтатусыОплатыM]:
         try: 
             if статусы_оплаты_id is None:
                 return None
@@ -22,7 +22,7 @@ class Csprepository:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Ошибка в базе данных: {str(e)}")
 
-    def status_by_name(self, название = None) -> Optional[СтатусыОплатыM]:
+    def status_by_name(self, название: Optional[str]) -> Optional[СтатусыОплатыM]:
         try: 
             if название is None: 
                 return None
@@ -45,7 +45,7 @@ class Csprepository:
             self.db.rollback()
             raise
     
-    def update_status(self, updatestatuspaymentdata: Dict[str, Any], статусы_оплаты_id = None, название = None) -> Optional[СтатусыОплатыM]:
+    def update_status(self, updatestatuspaymentdata: Dict[str, Any], статусы_оплаты_id: Optional[int], название: Optional[str]) -> Optional[СтатусыОплатыM]:
         try: 
             update_status_pyment_db = self.status_by_id(статусы_оплаты_id) or self.status_by_name(название)
              
@@ -63,9 +63,10 @@ class Csprepository:
             self.db.rollback()
             raise
 
-    def delete_status(self, статусы_оплаты_id: int) -> bool:
-       try:
-            status_pyment_db = self.status_by_id(статусы_оплаты_id)
+    def delete_status(self, статусы_оплаты_id: Optional[int], название: Optional[str]) -> bool:
+        try:
+    
+            status_pyment_db = self.status_by_id(статусы_оплаты_id) or self.status_by_name(название)
 
             if status_pyment_db is None:
                 return False

@@ -18,7 +18,7 @@ class Cspservice():
     def Sget_all(self):
         return [self._public(sp) for sp in self.repository.get_all()] 
 
-    def Ssearch(self, название = None, статусы_оплаты_id = None) -> Dict[str, Any]:
+    def Ssearch(self, статусы_оплаты_id: Optional[int], название: Optional[str]) -> Dict[str, Any]:
         if название:
             db_status_payment = self.repository.status_by_name(название)
         elif статусы_оплаты_id:
@@ -44,22 +44,22 @@ class Cspservice():
             "status_payment": self._public(db_status_payment)
         }
 
-    def Supdate_status(self,  updatestatuspaymentdata: Dict[str, Any],  название = None , статусы_оплаты_id = None) -> Dict[str, Any]:
+    def Supdate_status(self, updatestatuspaymentdata: Dict[str, Any], статусы_оплаты_id: Optional[int], название: Optional[str]) -> Dict[str, Any]:
         db_status_payment_update_data = {}
 
         if "название" in updatestatuspaymentdata:
             db_status_payment_update_data["name"] = updatestatuspaymentdata["название"]
 
-        db_status_payment_update = self.repository.update_status(db_status_payment_update_data, название, статусы_оплаты_id)
+        db_status_payment_update = self.repository.update_status(db_status_payment_update_data, статусы_оплаты_id, название)
 
         return {
             "message": "Статус оплаты успешно обновлен",
             "status_payment": self._public(db_status_payment_update)
         }
 
-    def Sdelete_status(self, статусы_оплаты_id: int) -> Dict[str, Any]:
+    def Sdelete_status(self, статусы_оплаты_id: Optional[int], название: Optional[str]) -> Dict[str, Any]:
 
-        self.repository.delete_status(статусы_оплаты_id)
+        self.repository.delete_status(статусы_оплаты_id, название)
 
         return {
             "message": "Статус опоаты успешно удален"

@@ -8,7 +8,11 @@ class Ctcrepository():
         self.db = db
 
     def get_all(self) -> List[ТипКлиентаM]: 
-        return self.db.query(ТипКлиентаM).all()
+        try:
+            return self.db.query(ТипКлиентаM).all()
+        except HTTPException:
+            self.db.rollback()
+            raise
 
     def create_type_client(self, TCdata: Dict[str, Any]) -> ТипКлиентаM:
         try:

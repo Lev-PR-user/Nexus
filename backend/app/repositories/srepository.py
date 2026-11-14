@@ -8,7 +8,11 @@ class Csrepository():
         self.db = db
 
     def get_all(self) -> List[УслугиM]:
-        return self.db.query(УслугиM).all()
+        try:
+            return self.db.query(УслугиM).all()
+        except HTTPException:
+            self.db.rollback()
+            raise
 
     def create_service(self, servicedata: Dict[str, Any]) -> УслугиM:
         try:

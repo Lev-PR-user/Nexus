@@ -9,7 +9,12 @@ class Crrepository():
         self.db = db
 
     def get_all(self) -> List[РолиM]:
-        return self.db.query(РолиM).all()
+        try:
+            return self.db.query(РолиM).all()
+            
+        except HTTPException:
+            self.db.rollback()
+            raise
 
     def create_role(self, roledata: Dict[str, Any]) -> РолиM:
         try:

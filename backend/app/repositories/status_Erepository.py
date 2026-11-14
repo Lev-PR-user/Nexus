@@ -8,7 +8,11 @@ class Cstatus_Erepository():
         self.db = db
 
     def get_all(self) -> List[СтатусОборудованияM]:
-        return self.db.query(СтатусОборудованияM).all()
+        try:
+            return self.db.query(СтатусОборудованияM).all()
+        except HTTPException:
+            self.db.rollback()
+            raise
 
     def create_status_equipment(self, SEdata: Dict[str, Any]) -> СтатусОборудованияM:
         try: 

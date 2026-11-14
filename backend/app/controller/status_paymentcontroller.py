@@ -26,7 +26,7 @@ def get_all(db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=f"Ошибка при получении статуса оборудования: {str(e)}")
     
 @MSPRouter.get("status_search")
-def search(статусы_оплаты_id: Optional[int] = None, название: Optional[int] = None,  db: Session = Depends(get_db)):
+def search(статусы_оплаты_id: Optional[int] = None, название: Optional[str] = None,  db: Session = Depends(get_db)):
     try:
         service = Cspservice(db)
         return service.Ssearch(статусы_оплаты_id, название)
@@ -46,20 +46,20 @@ def create_status(statuspaymentdata: Dict[str, Any], db: Session = Depends(get_d
         raise HTTPException(status_code=500, detail=f"Ошибка при получении статуса оборудования: {str(e)}")
 
 @ASPRouter.put("update_status")
-def update_status(название: Optional[str], статусы_оплаты_id: Optional[int], updatestatuspaymentdata: Dict[str, Any], db: Session = Depends(get_db)):
+def update_status(updatestatuspaymentdata: Dict[str, Any], статусы_оплаты_id: Optional[int] = None, название: Optional[str] = None, db: Session = Depends(get_db)):
     try:
         service = Cspservice(db)
-        return service.Supdate_status(updatestatuspaymentdata, название, статусы_оплаты_id)
+        return service.Supdate_status(updatestatuspaymentdata, статусы_оплаты_id, название)
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Ошибка при получении статуса оборудования: {str(e)}")
 
 @ASPRouter.delete("status_delete")
-def delete_status(статусы_оплаты_id: int, db: Session = Depends(get_db)):
+def delete_status(статусы_оплаты_id: Optional[int] = None, название: Optional[str] = None, db: Session = Depends(get_db)):
     try:
         service = Cspservice(db)
-        return service.Sdelete_status(статусы_оплаты_id)
+        return service.Sdelete_status(статусы_оплаты_id, название)
     except HTTPException:
         raise
     except Exception as e:

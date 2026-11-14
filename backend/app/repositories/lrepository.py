@@ -8,7 +8,11 @@ class Clrepository():
         self.db = db
 
     def get_all(self) -> List[ЛокацииM]:
-        return self.db.query(ЛокацииM).all()
+        try:
+            return self.db.query(ЛокацииM).all()
+        except HTTPException:
+            self.db.rollback()
+            raise
 
     def create_location(self, locationdata: Dict[str, Any]) -> ЛокацииM:
         try:
