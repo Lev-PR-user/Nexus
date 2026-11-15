@@ -11,3 +11,7 @@ from .scontroller import ASRoute, PSRoute
 from .ocontroller import AORoute, MAORoute
 from .ccontroller import ACRoute, MACRoute
 from .ordercontroller import ORDERoute
+
+from .status_paymentcontroller import ASPRouter, MSPRouter
+from .pmcontroller import AMPYRouter, MMPRouter
+from .pcontroller import  APAYRouter, MPAYRouter

@@ -1,6 +1,6 @@
 from typing import Dict, Any, List, Optional
 from fastapi import HTTPException
-from sqlalchemy import Date
+from datetime import date
 from ..repositories import Cprepository
 
 class Cpservice:
@@ -22,7 +22,7 @@ class Cpservice:
     def Sget_all(self) -> List[Dict[str, Any]]:
         return [self._public(pay) for pay in self.repository.get_all()]
 
-    def Ssearch(self, платежи_id: Optional[int], заказы_id: Optional[int], статус_id: Optional[int], метод_id: Optional[int], дата_от: Optional[Date], дата_до: Optional[Date]):
+    def Ssearch(self, платежи_id: Optional[int], заказы_id: Optional[int], статус_id: Optional[int], метод_id: Optional[int], дата_от: Optional[date], дата_до: Optional[date]):
         db_payment = self.repository.search(платежи_id, заказы_id, статус_id, метод_id, дата_от, дата_до)
 
         return [self._public(pay) for pay in db_payment]
