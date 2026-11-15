@@ -23,7 +23,7 @@ def get_all(db: Session = Depends(get_db)):
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Ошибка при получении статуса оборудования: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Ошибка при получении статуса платежа: {str(e)}")
     
 @MSPRouter.get("status_search")
 def search(статусы_оплаты_id: Optional[int] = None, название: Optional[str] = None,  db: Session = Depends(get_db)):
@@ -33,7 +33,7 @@ def search(статусы_оплаты_id: Optional[int] = None, названи�
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Ошибка при получении статуса оборудования: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Ошибка при получении статуса платежа: {str(e)}")
 
 @ASPRouter.post("status_create")
 def create_status(statuspaymentdata: Dict[str, Any], db: Session = Depends(get_db)):
@@ -43,7 +43,7 @@ def create_status(statuspaymentdata: Dict[str, Any], db: Session = Depends(get_d
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Ошибка при получении статуса оборудования: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Ошибка при создании статуса платежа: {str(e)}")
 
 @ASPRouter.put("update_status")
 def update_status(updatestatuspaymentdata: Dict[str, Any], статусы_оплаты_id: Optional[int] = None, название: Optional[str] = None, db: Session = Depends(get_db)):
@@ -53,7 +53,7 @@ def update_status(updatestatuspaymentdata: Dict[str, Any], статусы_опл
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Ошибка при получении статуса оборудования: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Ошибка при обновлении статуса платежа: {str(e)}")
 
 @ASPRouter.delete("status_delete")
 def delete_status(статусы_оплаты_id: Optional[int] = None, название: Optional[str] = None, db: Session = Depends(get_db)):
@@ -63,4 +63,4 @@ def delete_status(статусы_оплаты_id: Optional[int] = None, назв
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Ошибка при получении статуса оборудования: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Ошибка при удалении статуса платежа: {str(e)}")

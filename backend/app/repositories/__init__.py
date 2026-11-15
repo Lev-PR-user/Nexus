@@ -10,3 +10,4 @@ from .crepository import Ccrepository
 from .orderrepository import Corderrepository
 from .status_Prepository import Csprepository
 from .pmrepository import Cpmrepository
+from .prepository import Cprepository

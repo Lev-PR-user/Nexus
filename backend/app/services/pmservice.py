@@ -42,7 +42,7 @@ class Cpmservice:
             "method": self._public(db_method_payment)
         }
 
-    def Supdate_method_payment(self, updatemethodpaymentdata: Dict[str, Any], метод: Optional[str], метод_id: Optional[int], ) -> Dict[str, Any]:
+    def Supdate_method_payment(self, updatemethodpaymentdata: Dict[str, Any], метод: Optional[str], метод_id: Optional[int]) -> Dict[str, Any]:
         db_method_payment_update_data = {}
 
         if "метод" in updatemethodpaymentdata:
