@@ -2,11 +2,13 @@ from typing import Dict, Any, List, Optional
 from fastapi import HTTPException
 from datetime import date
 from ..repositories import Cprepository
+from ..validator import Cpaymnetvalidator
 
 class Cpservice:
     def __init__(self, db):
         self.db = db
         self.repository = Cprepository(db)
+        self.validator = Cpaymnetvalidator(self.repository)
 
     @staticmethod
     def _public(db_payment) -> Dict[str, Any]:
@@ -27,25 +29,29 @@ class Cpservice:
 
         return [self._public(pay) for pay in db_payment]
     
-    def Screte_payment(self, paymentdata: Dict[str, Any]):
+    def Screate_payment(self, paymentdata: Dict[str, Any]):
+        valid_data = self.validator.validate_create_payment(paymentdata)
+
         db_payment_data = {
             "order": paymentdata["заказы"],
             "price": paymentdata["цена"],
             "method": paymentdata["метод"],
             "status": paymentdata["статус"],
-            "date": paymentdata["дата"]
+            "date": valid_data["дата"]
         }
 
         db_payment = self.repository.create_payment(db_payment_data)
 
         return {
-            "message": "Алатеж создан",
+            "message": "Платеж создан",
             "payment": self._public(db_payment)
         }
 
     def Supdate_payment(self, платежи_id: int, updatepaymentdata: Dict[str, Any]):
 
-        db_payment_update_data = {}
+        valid_data = self.validator.validate_update_payment(updatepaymentdata)
+
+        db_payment_update_data: Dict[str, Any] = {}
 
         if "заказы" in updatepaymentdata:
             db_payment_update_data["order"] = updatepaymentdata["заказы"]
@@ -56,12 +62,12 @@ class Cpservice:
         if "статус" in updatepaymentdata:
             db_payment_update_data["status"] = updatepaymentdata["статус"]
         if "дата" in updatepaymentdata:
-            db_payment_update_data["date"] = updatepaymentdata["дата"]
+            db_payment_update_data["date"] = valid_data["дата"]
 
         db_payment = self.repository.update_payment(платежи_id, db_payment_update_data)
 
         return {
-            "message": "Алатеж создан",
+            "message": "Платеж обновлен",
             "payment": self._public(db_payment)
         }
 

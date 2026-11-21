@@ -1,6 +1,19 @@
 from data import order_data
 from data_def import _register_and_login
-from data import user_data, user_login_number, user_data_m, user_data_o, user_data_c
+from data import user_data, user_login_number, user_data_m, user_data_o, user_data_c, payment_order_data
+
+def test_create_order(client):
+    user, headers = _register_and_login(client, user_data_m, user_data_m)
+
+    response = client.post(
+        "/orders/order_create",
+        json=payment_order_data,
+        headers=headers)
+
+    print(response.json())
+
+    assert response.status_code == 200
+    assert response.json()["order"]
 
 
 def test_get_orders_without_token(client):
@@ -21,7 +34,7 @@ def test_get_orders_as_admin(client):
     user, headers = _register_and_login(client, user_data, user_login_number)
 
     response = client.get("/orders/orders", headers=headers)
-
+    
     assert response.status_code == 200
 
 
@@ -58,7 +71,7 @@ def test_create_order_as_admin(client):
         headers=headers
     )
 
-    assert response.status_code ==  400
+    assert response.status_code ==  200
 
 
 def test_get_order_by_id_as_admin(client):

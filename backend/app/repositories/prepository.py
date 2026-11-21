@@ -1,8 +1,9 @@
 from typing import Dict, Any, Optional, List
 from sqlalchemy.orm import Session
-from sqlalchemy import Date
+from datetime import date
+from decimal import Decimal
 from fastapi import HTTPException
-from ..models import ПлатежиM
+from ..models import ПлатежиM, ЗаказыM, МетодыОплатыM, СтатусыОплатыM
 
 class Cprepository:
     def __init__(self, db: Session):
@@ -22,7 +23,39 @@ class Cprepository:
             self.db.rollback()
             raise
 
-    def search(self, платежи_id: Optional[int], заказы_id: Optional[int], статус_id: Optional[int], метод_id: Optional[int], дата_от: Optional[Date], дата_до: Optional[Date]):
+    def get_order_by_id(self, заказы: int):
+        try:
+            return self.db.query(ЗаказыM).filter(ЗаказыM.заказ_id == заказы).first()
+        except HTTPException:
+            self.db.rollback()
+            raise
+
+    def get_method_by_id(self, метод: int):
+        try:
+            return self.db.query(МетодыОплатыM).filter(МетодыОплатыM.метод_id == метод).first()
+        except HTTPException:
+            self.db.rollback()
+            raise
+
+    def duplicate_payment(self, метод: int, цена: Decimal, заказы: int ):
+        try:
+            return self.db.query(ПлатежиM).filter(
+                ПлатежиM.метод == метод,
+                ПлатежиM.цена == цена,
+                ПлатежиM.заказы == заказы
+            ).first()
+        except HTTPException:
+            self.db.rollback()
+            raise
+
+    def get_status_by_id(self, статус: int):
+        try:
+            return self.db.query(СтатусыОплатыM).filter(СтатусыОплатыM.статусы_оплаты_id == статус).first()
+        except HTTPException:
+            self.db.rollback()
+            raise
+
+    def search(self, платежи_id: Optional[int], заказы_id: Optional[int], статус_id: Optional[int], метод_id: Optional[int], дата_от: Optional[date], дата_до: Optional[date]):
         try:
             query = self.db.query(ПлатежиM)
 

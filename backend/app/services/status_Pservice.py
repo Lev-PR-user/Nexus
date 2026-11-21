@@ -34,7 +34,7 @@ class Cspservice():
     def Screate_status(self, statuspaymentdata: Dict[str, Any]):
         
         db_status_payment_data = {
-            "название": statuspaymentdata["name"]
+            "name": statuspaymentdata["название"]
         }
 
         db_status_payment = self.repository.create_status(db_status_payment_data)

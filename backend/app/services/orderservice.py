@@ -60,26 +60,25 @@ class Corderservice():
         return self._public(db_order)
 
     def Screate_order(self, пользователь_id: int, orderdata: Dict[str, Any]) -> Dict[str, Any]:
-        role = self.repository.get_client_by_user_id(пользователь_id)
-        if not role:
-            raise HTTPException(status_code=400, detail="У вас нет прав на создание заказа")
 
-        self.validator.create_order(orderdata)    
+        valid_data = self.validator.create_order(orderdata)    
 
         db_order_data = {
-            "клиент": orderdata["client"],
-            "услуги": orderdata["service"],
-            "локации": orderdata["location"],
-            "дата_начала":  orderdata["date_start"],
-            "дата_конца":  orderdata["date_end"],
+            "client": orderdata["клиент"],
+            "service": orderdata["услуги"],
+            "location": orderdata["локации"],
+            "date_start":  valid_data["дата_начала"],
+            "date_end":  valid_data["дата_конца"],
             "оператор": None,
             "оборудование": None,
             "статус": 1
             }
             
-        self.repository.create_order(db_order_data)
+        db_order = self.repository.create_order(db_order_data)
 
-        return {"message": "Заявка на заказ создана"}
+        return {"message": "Заявка на заказ создана",
+                "order": self._public(db_order)
+                }
 
     def Sassign_resources(self, заказ_id: int, orderdata: Dict[str, Any]) -> Dict[str, Any]:
         self.validator.assign_resources(orderdata)

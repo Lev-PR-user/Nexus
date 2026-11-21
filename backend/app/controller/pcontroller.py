@@ -41,7 +41,7 @@ def search(платежи_id: Optional[int] = None, заказы_id: Optional[in
 def create_payment(paymentdata: Dict[str, Any], db: Session = Depends(get_db)):
     try:
         service = Cpservice(db)
-        return service.Screte_payment(paymentdata)
+        return service.Screate_payment(paymentdata)
     except HTTPException:
         raise
     except Exception as e:

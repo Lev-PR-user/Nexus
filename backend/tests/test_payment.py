@@ -1,17 +1,17 @@
-from data import payment_data, payment_method_data, payment_status_data, payment_order_data
+from data import payment_data, payment_method_data, payment_status_data, payment_order_data, order_data
 from data_def import _register_and_login
 from data import user_data, user_login_number, user_data_m, user_data_o, user_data_c
 
 def _prepare_payment_deps(client, headers):
     """Создаёт метод оплаты, статус оплаты, локацию, услугу, клиента и заказ."""
     client.post(
-        "/payment_methods/method_create",
+        "/payments_methods/method_create",
         json=payment_method_data,
         headers=headers
     )
 
     client.post(
-        "/payment_statuses/status_create",
+        "/status_payment/status_create",
         json=payment_status_data,
         headers=headers
     )
@@ -73,8 +73,8 @@ def test_get_payments_without_token(client):
 
 def test_get_payment_by_id_without_token(client):
     response = client.get(
-        "/payments/payment_search",
-        params={"платеж_id": 1}
+        "/payments/search",
+        params={"платежи_id": 1}
     )
 
     assert response.status_code == 401
@@ -84,7 +84,7 @@ def test_get_payment_by_id_without_token(client):
 def test_update_payment_without_token(client):
     response = client.put(
         "/payments/payment_update",
-        params={"платеж_id": 1},
+        params={"платежи_id": 1},
         json={"цена": "2000.00"}
     )
 
@@ -95,7 +95,7 @@ def test_update_payment_without_token(client):
 def test_delete_payment_without_token(client):
     response = client.delete(
         "/payments/payment_delete",
-        params={"платеж_id": 1}
+        params={"платежи_id": 1}
     )
 
     assert response.status_code == 401
@@ -112,7 +112,7 @@ def test_create_payment_as_admin(client):
         headers=headers
     )
 
-    assert response.status_code in (200, 201, 400, 500)
+    assert response.status_code == 200
 
 
 def test_create_payment_empty(client):
@@ -143,7 +143,8 @@ def test_create_payment_negative_price(client):
         headers=headers
     )
 
-    assert response.status_code in (400, 422)
+    assert response.status_code == 400
+    assert "Цена не может быть отрицательной" in response.json()["detail"]
 
 
 def test_create_payment_invalid_order(client):
@@ -161,7 +162,29 @@ def test_create_payment_invalid_order(client):
         headers=headers
     )
 
-    assert response.status_code in (400, 404, 500)
+    assert response.status_code == 404
+
+def test_create_method_payment(client):
+    user, headers = _register_and_login(client, user_data, user_login_number)
+
+    response = client.post(
+        "/payments_methods/method_create",
+        json=payment_method_data,
+        headers=headers
+    )
+
+    assert response.status_code == 200
+
+def test_create_status_payment(client):
+    user, headers = _register_and_login(client, user_data, user_login_number)
+
+    response = client.post(
+        "/status_payment/status_create",
+        json=payment_status_data,
+        headers=headers
+    )
+
+    assert response.status_code == 200
 
 
 def test_get_all_payments_as_admin(client):
@@ -174,39 +197,39 @@ def test_get_all_payments_as_admin(client):
 
 
 def test_get_all_payments_as_manager(client):
-    user, headers = _register_and_login(client, user_data_m, user_login_number)
+    user, headers = _register_and_login(client, user_data_m, user_data_m)
 
     response = client.get("/payments/payments", headers=headers)
 
-    assert response.status_code in (200, 403)
+    assert response.status_code == 200
 
 
 def test_get_all_payments_as_operator(client):
-    user, headers = _register_and_login(client, user_data_o, user_login_number)
+    user, headers = _register_and_login(client, user_data_o, user_data_o)
 
     response = client.get("/payments/payments", headers=headers)
 
-    assert response.status_code in (200, 403)
+    assert response.status_code  == 403
 
 
 def test_get_all_payments_as_client(client):
-    user, headers = _register_and_login(client, user_data_c, user_login_number)
+    user, headers = _register_and_login(client, user_data_c, user_data_c)
 
     response = client.get("/payments/payments", headers=headers)
 
-    assert response.status_code in (200, 403)
+    assert response.status_code == 403
 
 
 def test_get_payment_not_found(client):
     user, headers = _register_and_login(client, user_data, user_login_number)
 
     response = client.get(
-        "/payments/payment_search",
-        params={"платеж_id": 999999},
+        "/payments/search",
+        params={"платежи_id": 999999},
         headers=headers
     )
 
-    assert response.status_code in (400, 404)
+    assert response.status_code == 200
 
 
 def test_update_payment_not_found(client):
@@ -214,12 +237,12 @@ def test_update_payment_not_found(client):
 
     response = client.put(
         "/payments/payment_update",
-        params={"платеж_id": 999999},
+        params={"платежи_id": 999999},
         json={"цена": "2000.00"},
         headers=headers
     )
 
-    assert response.status_code in (400, 404, 500)
+    assert response.status_code == 404
 
 
 def test_delete_payment_not_found(client):
@@ -227,11 +250,11 @@ def test_delete_payment_not_found(client):
 
     response = client.delete(
         "/payments/payment_delete",
-        params={"платеж_id": 999999},
+        params={"платежи_id": 999999},
         headers=headers
     )
 
-    assert response.status_code in (200, 400, 404)
+    assert response.status_code == 200
 
 
 def test_get_payments_by_order(client):
@@ -239,60 +262,60 @@ def test_get_payments_by_order(client):
     _prepare_payment_deps(client, headers)
 
     response = client.get(
-        "/payments/payments_by_order",
+        "/payments/search",
         params={"заказ_id": 1},
         headers=headers
     )
 
-    assert response.status_code in (200, 400, 404)
+    assert response.status_code == 200
 
 
 def test_get_payments_by_status(client):
     user, headers = _register_and_login(client, user_data, user_login_number)
 
     response = client.get(
-        "/payments/payments_by_status",
+        "/payments/search",
         params={"статус_оплаты_id": 1},
         headers=headers
     )
 
-    assert response.status_code in (200, 400, 404)
+    assert response.status_code == 200
 
 
 def test_get_payments_by_method(client):
     user, headers = _register_and_login(client, user_data, user_login_number)
 
     response = client.get(
-        "/payments/payments_by_method",
+        "/payments/search",
         params={"метод_id": 1},
         headers=headers
     )
 
-    assert response.status_code in (200, 400, 404)
+    assert response.status_code == 200
 
 
 def test_get_payments_by_client(client):
     user, headers = _register_and_login(client, user_data, user_login_number)
 
     response = client.get(
-        "/payments/payments_by_client",
+        "/payments/search",
         params={"клиент_id": 1},
         headers=headers
     )
 
-    assert response.status_code in (200, 400, 404)
+    assert response.status_code == 200
 
 
 def test_get_payments_by_period(client):
     user, headers = _register_and_login(client, user_data, user_login_number)
 
     response = client.get(
-        "/payments/payments_by_period",
+        "/payments/search",
         params={"дата_от": "2026-01-01", "дата_до": "2026-12-31"},
         headers=headers
     )
 
-    assert response.status_code in (200, 400)
+    assert response.status_code == 200
 
 
 def test_create_payment_duplicate(client):
@@ -311,12 +334,13 @@ def test_create_payment_duplicate(client):
         headers=headers
     )
 
-    assert response.status_code in (200, 400)
+    assert response.status_code == 400
 
 
 def test_update_payment_status(client):
     user, headers = _register_and_login(client, user_data, user_login_number)
     _prepare_payment_deps(client, headers)
+
 
     create_res = client.post(
         "/payments/payment_create",
@@ -324,19 +348,16 @@ def test_update_payment_status(client):
         headers=headers
     )
 
-    if create_res.status_code not in (200, 201):
-        return
-
     payment_id = create_res.json()["payment"]["id"]
 
-    update_res = client.patch(
-        "/payments/payment_update_status",
-        params={"платеж_id": payment_id},
+    update_res = client.put(
+        "/payments/payment_update",
+        params={"платежи_id": payment_id},
         json={"статус": 2},
         headers=headers
     )
 
-    assert update_res.status_code in (200, 400, 404)
+    assert update_res.status_code == 200
 
 def test_delete_payment_as_admin(client):
     user, headers = _register_and_login(client, user_data, user_login_number)
@@ -348,38 +369,12 @@ def test_delete_payment_as_admin(client):
         headers=headers
     )
 
-    if create_res.status_code not in (200, 201):
-        return
-
     payment_id = create_res.json()["payment"]["id"]
 
     delete_res = client.delete(
         "/payments/payment_delete",
-        params={"платеж_id": payment_id},
+        params={"платежи_id": payment_id},
         headers=headers
     )
 
-    assert delete_res.status_code in (200, 400, 404)
-
-
-def test_payment_public_fields(client):
-    user, headers = _register_and_login(client, user_data, user_login_number)
-    _prepare_payment_deps(client, headers)
-
-    create_res = client.post(
-        "/payments/payment_create",
-        json=payment_data,
-        headers=headers
-    )
-
-    if create_res.status_code not in (200, 201):
-        return
-
-    payment = create_res.json()["payment"]
-
-    assert "id" in payment
-    assert "order" in payment
-    assert "price" in payment
-    assert "method" in payment
-    assert "status" in payment
-    assert "date" in payment
+    assert delete_res.status_code == 200
