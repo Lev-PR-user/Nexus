@@ -10,8 +10,6 @@ def test_create_order(client):
         json=payment_order_data,
         headers=headers)
 
-    print(response.json())
-
     assert response.status_code == 200
     assert response.json()["order"]
 

@@ -350,6 +350,14 @@ def test_update_payment_status(client):
 
     payment_id = create_res.json()["payment"]["id"]
 
+    client.post(
+        "/status_payment/status_create",
+        json={
+            "название": "не оплачен"
+        },
+        headers=headers
+    )
+
     update_res = client.put(
         "/payments/payment_update",
         params={"платежи_id": payment_id},

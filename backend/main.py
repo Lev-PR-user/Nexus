@@ -7,7 +7,7 @@ import os
 from app.controller import ACRoute, AORoute, ASRoute, ALRoute, AERoute, ASERoute, ATCRoute
 from app.controller import MAORoute, OMAERoute, MATCRoute, MASERoute, MACRoute
 from app.controller import URoute, DURoute, PLRoute, RRoute, PSRoute, ORDERoute
-from app.controller import ASPRouter, AMPYRouter, APAYRouter, MSPRouter, MMPRouter, MPAYRouter
+from app.controller import ASPRouter, AMPYRouter, APAYRouter, MSPRouter, MMPRouter, MPAYRouter, ASNRouter
 
 load_dotenv()
 
@@ -42,6 +42,7 @@ app.include_router(RRoute)
 app.include_router(ASPRouter)
 app.include_router(AMPYRouter)
 app.include_router(APAYRouter)
+app.include_router(ASNRouter)
 
 """"Менеджер маршруты"""
 app.include_router(MAORoute)

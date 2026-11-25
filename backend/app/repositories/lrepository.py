@@ -18,9 +18,9 @@ class Clrepository():
         try:
 
             location_db = ЛокацииM(
-                название= locationdata["name"],
-                адрес= locationdata["address"],
-                часы_работы= locationdata["openning_hours"]
+                название=locationdata["name"],
+                адрес=locationdata["address"],
+                часы_работы=locationdata["openning_hours"]
             )
 
             self.db.add(location_db)

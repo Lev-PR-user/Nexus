@@ -42,7 +42,7 @@ class Ceservice():
 
         self.validator.validate_create_equipment(equipmentdata)
 
-        db_equipment_data ={
+        db_equipment_data = {
             "model": equipmentdata["модель"],
             "series": equipmentdata["серия"],
             "status": equipmentdata["статус"],

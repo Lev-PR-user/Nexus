@@ -11,3 +11,7 @@ from .orderrepository import Corderrepository
 from .status_Prepository import Csprepository
 from .pmrepository import Cpmrepository
 from .prepository import Cprepository
+from .statusnotificationrepository import Cstatusnotification
+from .categorynotificationrepository import Ccategorynotificationrepository
+from .channelnotificationrepository import Cchannelnotification
+from .notificationrepository import Cnotification
