@@ -1,7 +1,7 @@
 from typing import Dict, Any, Optional, List
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from ..models import УведомленияM
+from ..models import УведомленияM, КаналУведомленийM, КатегорияУведомленияM, СтатусУведомленияM, ПользователиM
 
 class Cnotification:
     def __init__(self, db: Session):
@@ -24,6 +24,34 @@ class Cnotification:
     def get_notification_by_user_id(self, пользователь: int) -> Optional[УведомленияM]:
         try:
             return self.db.query(УведомленияM).filter(УведомленияM.пользователь == пользователь).first()
+        except HTTPException:
+            self.db.rollback()
+            raise
+
+    def get_notification_status_by_id(self, статус: int) -> Optional[СтатусУведомленияM]:
+        try:
+            return self.db.query(СтатусУведомленияM).filter(СтатусУведомленияM.статус_уведомления_id == статус).first()
+        except HTTPException:
+            self.db.rollback()
+            raise
+
+    def get_user_by_id(self, пользователь: int) -> Optional[ПользователиM]:
+        try:
+            return self.db.query(ПользователиM).filter(ПользователиM.пользователь_id == пользователь).first()
+        except HTTPException:
+            self.db.rollback()
+            raise
+
+    def get_notification_category_by_id(self, категория_уведомления: int) -> Optional[КатегорияУведомленияM]:
+        try:
+            return self.db.query(КатегорияУведомленияM).filter(КатегорияУведомленияM.категория_уведомления_id == категория_уведомления).first()
+        except HTTPException:
+            self.db.rollback()
+            raise
+
+    def get_notification_channel_by_id(self, канал_уведомления: int) -> Optional[КаналУведомленийM]:
+        try:
+            return self.db.query(КаналУведомленийM).filter(КаналУведомленийM.канал_уведомления_id == канал_уведомления).first()
         except HTTPException:
             self.db.rollback()
             raise

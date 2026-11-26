@@ -9,3 +9,4 @@ from .tcvalidator import Сtcvalidator
 from .cvalidator import Ccvalidator
 from .ordervalidator import Cordervalidator
 from .paymentvalidator import Cpaymnetvalidator
+from .notificationvalidator import Cnotificationvalidator

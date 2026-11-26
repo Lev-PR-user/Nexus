@@ -1,11 +1,13 @@
 from typing import Dict, Any, Optional, List
 from fastapi import HTTPException
 from ..repositories import Cnotification
+from ..validator import Cnotificationvalidator
 
 class Cnotificationservice():
     def __init__(self, db):
         self.db = db
         self.repository = Cnotification(db)
+        self.validator = Cnotificationvalidator(self.repository)
 
     @staticmethod
     def _public(notification_db) -> Dict[str, Any]:
@@ -28,12 +30,15 @@ class Cnotificationservice():
         return self.repository.get_notification_by_user_id(пользователь)
 
     def create_notification(self, notificationdata: Dict[str, Any]) -> Dict[str, Any]:
+
+        date = self.validator.validate_create_notification(notificationdata)
+
         db_notification_data = {
             "user": notificationdata["пользователь"],
             "category": notificationdata["категория_уведомления"],
             "channel": notificationdata["канал_уведомления"],
             "status": notificationdata["статус"],
-            "date": notificationdata["дата_отправки"]
+            "date": date["дата_отправки"]
         }
 
         db_notification = self.repository.create_notification(db_notification_data)

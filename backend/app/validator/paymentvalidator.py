@@ -58,3 +58,5 @@ class Cpaymnetvalidator:
                 parsed_data["дата"] = datetime.strptime(parsed_data["дата"], "%Y-%m-%d").date()
             except ValueError:
                 raise HTTPException(status_code=400, detail="неверный формат даты")
+
+        return parsed_data
