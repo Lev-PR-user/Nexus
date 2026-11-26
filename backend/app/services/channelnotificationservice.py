@@ -19,7 +19,7 @@ class Cchannelnotificationservice:
 
     def Screate_channel(self, chndata: Dict[str, Any]) -> Dict[str, Any]:
         db_channel_data = {
-            "channel": ["канал"]
+            "channel": chndata["канал"]
         }
 
         db_channel = self.repository.create_channel_notification(db_channel_data)

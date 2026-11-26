@@ -10,7 +10,7 @@ class Ccategorynotificationrepository:
 
     def get_category_notification_by_id(self, категория_уведомления_id: int) -> Optional[КатегорияУведомленияM]:
         try: 
-            self.db.query(КатегорияУведомленияM).filter(КатегорияУведомленияM.категория_уведомления_id == категория_уведомления_id)
+           return self.db.query(КатегорияУведомленияM).filter(КатегорияУведомленияM.категория_уведомления_id == категория_уведомления_id).first()
         except HTTPException:
             self.db.rollback()
             raise
@@ -44,7 +44,7 @@ class Ccategorynotificationrepository:
             category_notification_db = self.get_category_notification_by_id(категория_уведомления_id)
 
             if category_notification_db is None:
-                raise HTTPException(status_code=400, detail="Такой катеегории уведомления нет")
+                raise HTTPException(status_code=400, detail="Такой категории уведомления нет")
 
             if "category" in updatecategorynotificationata:
                 category_notification_db.категория = updatecategorynotificationata["category"]

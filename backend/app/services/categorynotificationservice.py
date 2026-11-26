@@ -28,12 +28,12 @@ class Ccategorynotificationservice:
 
         return {
             "message": "Категория успешно создана",
-            "category_notification": self. _public(db_category_notification)
+            "category": self. _public(db_category_notification)
         }
 
     def update_category_notfication(self, категория_уведомления_id: int, updatecategorynotificationata: Dict[str, Any]):
 
-        db_category_notification_data ={}
+        db_category_notification_data = {}
 
         if "категория" in updatecategorynotificationata:
             db_category_notification_data["category"] = updatecategorynotificationata["категория"]
@@ -41,7 +41,7 @@ class Ccategorynotificationservice:
         db_category_notification = self.repository.update_category_notification(категория_уведомления_id, db_category_notification_data)
 
         return {
-            "messaage": "Категория успешно обновлена",
+            "message": "Категория успешно обновлена",
             "category": self._public(db_category_notification)
         }
 

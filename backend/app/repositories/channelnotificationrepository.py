@@ -47,7 +47,7 @@ class Cchannelnotification:
                 raise HTTPException(status_code=400, detail="Такого канала нет")
 
             if "channel" in updatechndata:
-                channel_db.канал = updatechndata["channel_db"]
+                channel_db.канал = updatechndata["channel"]
 
             self.db.commit()
 

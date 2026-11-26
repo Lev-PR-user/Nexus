@@ -20,5 +20,5 @@ from .pcontroller import  APAYRouter, MPAYRouter
 
 from .statusnotificationcontroller import ASNRouter
 from .notificationcontroller import ANRoute
-from .categorynotificationcontroller import ACNRoute
+from .categorynotificationcontroller import ACANRoute
 from .channelcontroller import ACNRoute

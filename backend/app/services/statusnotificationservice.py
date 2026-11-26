@@ -1,8 +1,8 @@
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from ..repositories import Cstatusnotification
 
 class Cstatusnotificationservice():
-    def init(self, db):
+    def __init__(self, db):
         self.db = db
         self.repository = Cstatusnotification(db)
 
@@ -13,7 +13,7 @@ class Cstatusnotificationservice():
             "status": db_notfication_status.статус
         }
     
-    def get_all(self):
+    def get_all(self) -> List[Dict[str, Any]]:
         return [self._public(ns) for ns in self.repository.get_all()]
 
     def Screate_notification(self, notificationdata: Dict[str, Any]) -> Dict[str, Any]:
@@ -25,7 +25,7 @@ class Cstatusnotificationservice():
 
         return {
             "message": "Статус уведомления успешно создан",
-            "status_notification": [self._public(db_notfication_status)]
+            "status": self._public(db_notfication_status)
         }
 
     def Supdate_status_notification(self, статус_оборудования_id: int, updatenotificationdata: Dict[str, Any]) -> Dict[str, Any]:
@@ -38,7 +38,7 @@ class Cstatusnotificationservice():
 
         return {
             "message": "Статус успешно обновлен",
-            "status_notification": [self._public(db_notfication_status)]
+            "status_notification": self._public(db_notfication_status)
         }
 
     def Sdelete_status_notification(self, статус_оборудования_id: int) -> Dict[str, Any]:

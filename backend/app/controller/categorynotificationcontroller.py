@@ -4,13 +4,13 @@ from sqlalchemy.orm import Session
 from ..db import get_db
 from ..services import Ccategorynotificationservice, require_roles
 
-ACNRoute = APIRouter(
+ACANRoute = APIRouter(
     prefix="/categories_notification", 
-    tags=["/clients"],
+    tags=["/categories_notification"],
     dependencies=[Depends(require_roles(["админ"]))]
     )
 
-@ACNRoute.get("/get_all_category")
+@ACANRoute.get("/get_all_category")
 def get(db: Session = Depends(get_db)):
     try:
         service = Ccategorynotificationservice(db)
@@ -20,8 +20,8 @@ def get(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Ошибка при получении категории уведомления: {str(e)}")
 
-@ACNRoute.post("/create_category_notification")
-def create_category_notification(categorynotificationata, db: Session = Depends(get_db)):
+@ACANRoute.post("/create_category_notification")
+def create_category_notification(categorynotificationata: Dict[str, Any], db: Session = Depends(get_db)):
     try:
         service = Ccategorynotificationservice(db)
         return service.create_category_notification(categorynotificationata)
@@ -30,7 +30,7 @@ def create_category_notification(categorynotificationata, db: Session = Depends(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Ошибка при создании категории уведомления: {str(e)}")
 
-@ACNRoute.put("/update_category_notification")
+@ACANRoute.put("/update_category_notification")
 def update_category_notification(категория_уведомления_id: int, updatecategorynotificationata: Dict[str, Any], db: Session = Depends(get_db)):
     try:
         service = Ccategorynotificationservice(db)
@@ -40,7 +40,7 @@ def update_category_notification(категория_уведомления_id: i
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Ошибка при обновлении категории уведомления: {str(e)}")
 
-@ACNRoute.delete("/delete_category_notification")
+@ACANRoute.delete("/delete_category_notification")
 def delete_category_notification(категория_уведомления_id: int, db: Session = Depends(get_db)):
     try:
         service = Ccategorynotificationservice(db)

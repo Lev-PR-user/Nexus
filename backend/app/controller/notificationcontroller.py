@@ -35,10 +35,10 @@ def get_by_user(пользователь_id: int, db: Session = Depends(get_db))
     except Exception as e: raise HTTPException(status_code=500, detail=f"Ошибка: {str(e)}")
 
 @ANRoute.post("/notification_create")
-def create_notification(data: Dict[str, Any], db: Session = Depends(get_db)):
+def create_notification(notificationdata: Dict[str, Any], db: Session = Depends(get_db)):
     try:
         service = Cnotificationservice(db)
-        return service.Screate_notification(data)
+        return service.create_notification(notificationdata)
     except HTTPException: raise
     except Exception as e: raise HTTPException(status_code=500, detail=f"Ошибка: {str(e)}")
 

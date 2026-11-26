@@ -30,7 +30,7 @@ def status_notifications_update(статус_оборудования_id: int, u
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Ошибка при обновлении статуса уведомления: {str(e)}")
 
-@ASNRouter.delete("delete_status_notification")
+@ASNRouter.delete("/delete_status_notification")
 def status_notification_delete(статус_оборудования_id: int, db: Session = Depends(get_db)):
     try:
         service = Cstatusnotificationservice(db)

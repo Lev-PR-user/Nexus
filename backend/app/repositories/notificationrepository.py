@@ -21,9 +21,9 @@ class Cnotification:
             self.db.rollback()
             raise
 
-    def get_notification_by_user_id(self, пользователь: int) -> Optional[УведомленияM]:
+    def get_notification_by_user_id(self, пользователь: int) -> List[УведомленияM]:
         try:
-            return self.db.query(УведомленияM).filter(УведомленияM.пользователь == пользователь).first()
+            return self.db.query(УведомленияM).filter(УведомленияM.пользователь == пользователь).all()
         except HTTPException:
             self.db.rollback()
             raise
@@ -63,7 +63,7 @@ class Cnotification:
                 категория_уведомления=notificationdata["category"],
                 канал_уведомления=notificationdata["channel"],
                 статус=notificationdata["status"],
-                дата_отправки=notificationdata["send_date"]
+                дата_отправки=notificationdata["date"]
             )
 
             self.db.add(notification_db)

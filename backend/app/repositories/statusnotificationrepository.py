@@ -17,7 +17,7 @@ class Cstatusnotification:
 
     def get_status_notification_by_id(self, статус_оборудования_id: int) -> Optional[СтатусУведомленияM]:
         try:
-            return self.db.query(СтатусУведомленияM).filter(СтатусУведомленияM.статус_уведомления_id == статус_оборудования_id)
+            return self.db.query(СтатусУведомленияM).filter(СтатусУведомленияM.статус_уведомления_id == статус_оборудования_id).first()
         except HTTPException:
             self.db.rollback()
             raise
@@ -69,8 +69,6 @@ class Cstatusnotification:
             self.db.delete(status_n_db)
 
             self.db.commit()
-
-            self.db.refresh(status_n_db)
 
             return True
         except HTTPException:
