@@ -4,10 +4,21 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
 
-from app.controller import ACRoute, AORoute, ASRoute, ALRoute, AERoute, ASERoute, ATCRoute
-from app.controller import MAORoute, OMAERoute, MATCRoute, MASERoute, MACRoute
-from app.controller import URoute, DURoute, PLRoute, RRoute, PSRoute, ORDERoute
-from app.controller import ASPRouter, AMPYRouter, APAYRouter, MSPRouter, MMPRouter, MPAYRouter, ASNRouter
+from app.controller import ALRoute, PLRoute
+
+from app.controller import ASERoute, MASERoute, AERoute, OMAERoute
+
+from app.controller import ASRoute, PSRoute
+
+from app.controller import AORoute, MAORoute
+
+from app.controller import ATCRoute, MATCRoute, ACRoute, MACRoute
+
+from app.controller import URoute, DURoute, RRoute, ORDERoute
+
+from app.controller import ASPRouter, MSPRouter, AMPYRouter, MMPRouter, APAYRouter, MPAYRouter
+
+from app.controller import ASNRouter, ANRoute, ACNRoute, ACNRoute
 
 load_dotenv()
 

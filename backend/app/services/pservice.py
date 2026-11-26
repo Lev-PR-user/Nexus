@@ -4,7 +4,7 @@ from datetime import date
 from ..repositories import Cprepository
 from ..validator import Cpaymnetvalidator
 
-class Cpservice:
+class Cpservice():
     def __init__(self, db):
         self.db = db
         self.repository = Cprepository(db)

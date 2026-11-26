@@ -2,7 +2,7 @@ from typing import Dict, Any, Optional, List
 from fastapi import HTTPException
 from ..repositories import Cnotification
 
-class Cnotificationservice:
+class Cnotificationservice():
     def __init__(self, db):
         self.db = db
         self.repository = Cnotification(db)

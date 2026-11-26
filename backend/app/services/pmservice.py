@@ -2,7 +2,7 @@ from typing import Dict, Any, List, Optional
 from fastapi import HTTPException
 from ..repositories import Cpmrepository
 
-class Cpmservice:
+class Cpmservice():
     def __init__(self, db):
             self.db = db
             self.repository = Cpmrepository(db)

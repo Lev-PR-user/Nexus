@@ -1,7 +1,6 @@
 from typing import Dict, Any, Optional
 from fastapi import HTTPException
 from ..repositories import Csprepository
-# from ..validator import 
 
 class Cspservice():
     def __init__(self, db):

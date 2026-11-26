@@ -1,7 +1,7 @@
 from typing import Dict, Any, Optional
 from ..repositories import Cstatusnotification
 
-class Cstatusnotification:
+class Cstatusnotificationservice():
     def init(self, db):
         self.db = db
         self.repository = Cstatusnotification(db)

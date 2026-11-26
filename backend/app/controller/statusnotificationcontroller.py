@@ -1,5 +1,5 @@
 from typing import Dict, Any
-from ..services import Cstatusnotification, require_roles
+from ..services import Cstatusnotificationservice, require_roles
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, Depends, APIRouter
 from ..db import get_db
@@ -13,7 +13,7 @@ ASNRouter = APIRouter(
 @ASNRouter.post("/create_status_notifications")
 def status_notification_create(notificationdata: Dict[str, Any], db: Session = Depends(get_db)):
     try:
-        service = Cstatusnotification
+        service = Cstatusnotificationservice(db)
         return service.Screate_notification(notificationdata)
     except HTTPException:
         raise
@@ -23,7 +23,7 @@ def status_notification_create(notificationdata: Dict[str, Any], db: Session = D
 @ASNRouter.put("/update_status_notifications")
 def status_notifications_update(статус_оборудования_id: int, updatenotificationdata: Dict[str, Any], db: Session = Depends(get_db)):
     try:
-        service = Cstatusnotification(db)
+        service = Cstatusnotificationservice(db)
         return service.Supdate_status_notification(статус_оборудования_id, updatenotificationdata)
     except HTTPException:
         raise
@@ -33,7 +33,7 @@ def status_notifications_update(статус_оборудования_id: int, u
 @ASNRouter.delete("delete_status_notification")
 def status_notification_delete(статус_оборудования_id: int, db: Session = Depends(get_db)):
     try:
-        service = Cstatusnotification(db)
+        service = Cstatusnotificationservice(db)
         return service.Sdelete_status_notification(статус_оборудования_id)
     except HTTPException:
         raise
